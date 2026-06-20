@@ -4,16 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Music Fractions</title>
+  <script>
+    (function () {
+      function assetBase() {
+        var p = location.pathname;
+        if (p.endsWith('/')) return p;
+        if (/\.[a-zA-Z0-9]+$/.test(p.split('/').pop() || '')) return p.replace(/\/[^/]*$/, '/');
+        return p + '/';
+      }
+      window.__assetBase = assetBase();
+      var s = document.createElement('style');
+      s.textContent = "@font-face{font-family:'Noto Music';font-style:normal;font-weight:400;font-display:swap;src:url('" + window.__assetBase + "fonts/NotoMusic-Regular.ttf') format('truetype');}";
+      document.head.appendChild(s);
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <style>
-    @font-face {
-      font-family: 'Noto Music';
-      font-style: normal;
-      font-weight: 400;
-      font-display: swap;
-      src: url('fonts/NotoMusic-Regular.ttf') format('truetype');
-    }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-6px); }
@@ -246,7 +253,7 @@
         <button onclick="explorerExploreNote('minim', 2, 'Minim')" 
                 class="explorer-btn p-6 bg-amber-600 hover:bg-amber-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-2">
-            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
             <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-minim"/></svg>
           </div>
           <div class="font-bold text-xl">Minim</div>
@@ -279,7 +286,7 @@
         <button onclick="explorerExploreNote('semiquaver', 0.25, 'Semiquaver')" 
                 class="explorer-btn p-6 bg-violet-600 hover:bg-violet-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-2">
-            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
             <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
           </div>
           <div class="font-bold text-xl">Semiquaver</div>
@@ -369,7 +376,7 @@
         <button onclick="notesAddNote('minim', 2)" 
                 class="notes-btn p-5 bg-amber-600 hover:bg-amber-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-1">
-            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
             <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-minim"/></svg>
           </div>
           <div class="font-bold">Minim</div>
@@ -402,7 +409,7 @@
         <button onclick="notesAddNote('semiquaver', 0.25)" 
                 class="notes-btn p-5 bg-violet-600 hover:bg-violet-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-1">
-            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
             <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
           </div>
           <div class="font-bold">Semiquaver</div>
