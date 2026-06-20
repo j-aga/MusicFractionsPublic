@@ -7,6 +7,13 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <style>
+    @font-face {
+      font-family: 'Noto Music';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('fonts/NotoMusic-Regular.ttf') format('truetype');
+    }
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       20% { transform: translateX(-6px); }
@@ -126,12 +133,21 @@
       width: auto;
       max-height: none;
       max-width: none;
-      flex-shrink: 0;
     }
     .note-icon-slot .note-glyph {
       font-size: 4.5rem;
       line-height: 1;
     }
+    .note-unicode {
+      display: none;
+      font-family: 'Noto Music', sans-serif;
+    }
+    body.music-font-ready .note-unicode { display: block; }
+    body.music-font-ready .note-fallback-svg { display: none !important; }
+    body.music-font-ready .note-fallback-text { display: none; }
+    .music-font { font-family: 'Noto Music', sans-serif; }
+    .notes-glyph-sm { font-size: 1.5rem; line-height: 1; vertical-align: middle; }
+    .notes-glyph-eq { font-size: 1.25rem; line-height: 1; vertical-align: -0.15em; }
     .note-icon-slot--lg {
       height: 5.5rem;
       width: 5.5rem;
@@ -148,12 +164,10 @@
     .notes-icon-eq { height: 1.25rem; width: auto; vertical-align: -0.15em; }
     .explorer-btn { transition: all 0.1s ease; }
     .explorer-btn:active { transform: scale(0.95); }
-    .explorer-icon-lg { height: 5.5rem; width: auto; }
   </style>
 </head>
 <body class="min-h-screen font-sans text-slate-800">
 
-  <!-- Embedded note SVG symbols (semibreve, minim, semiquaver) -->
   <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
     <symbol id="note-semibreve" viewBox="0 0 15.698 7.087">
       <path fill="#fff" d="m 7.863337,0 c -3.62167,0 -4.90956,1.83751 -4.90956,3.54376 0,1.70625 1.28789,3.54376 4.90956,3.54376 3.62169,0 4.88088,-1.83751 4.88088,-3.54376 0,-1.70625 -1.25919,-3.54376 -4.88088,-3.54376 m -2.17791,2.38712 c -0.0287,-0.10664 -0.0287,-0.20918 -0.0287,-0.31582 0,-0.20918 0.0533,-0.41836 0.15996,-0.60293 0.18047,-0.2625 0.49629,-0.44707 0.89004,-0.525 0.34043,-0.0779 0.525,-0.13125 1.20996,-0.13125 h 0.0246 c 1.05,0 1.39044,0.97207 1.68165,1.96875 l 0.0779,0.2625 c 0.20919,0.68086 0.31584,1.25918 0.31584,1.70625 0,0.31582 -0.0533,0.60293 -0.15996,0.81211 -0.15588,0.29121 -0.41838,0.47578 -0.86544,0.57832 -0.23788,0.0533 -0.63163,0.0779 -0.63163,0.0779 -0.13125,0 -0.23381,0.0287 -0.34043,0.0287 -0.84082,0 -1.36582,-0.31581 -1.73088,-1.44374 -0.31581,-0.97207 -0.36912,-1.25918 -0.60291,-2.41582"/>
@@ -221,7 +235,8 @@
         <button onclick="explorerExploreNote('semibreve', 4, 'Semibreve')" 
                 class="explorer-btn p-6 bg-red-600 hover:bg-red-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot note-icon-slot--semibreve mb-2">
-            <svg viewBox="0 0 15.698 7.087" class="note-svg note-svg--wide" aria-hidden="true"><use href="#note-semibreve"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅝</span>
+            <svg viewBox="0 0 15.698 7.087" class="note-svg note-svg--wide note-fallback-svg" aria-hidden="true"><use href="#note-semibreve"/></svg>
           </div>
           <div class="font-bold text-xl">Semibreve</div>
           <div class="text-red-200">4 beats</div>
@@ -231,7 +246,8 @@
         <button onclick="explorerExploreNote('minim', 2, 'Minim')" 
                 class="explorer-btn p-6 bg-amber-600 hover:bg-amber-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-2">
-            <svg viewBox="0 0 75 150" class="note-svg" aria-hidden="true"><use href="#note-minim"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
+            <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-minim"/></svg>
           </div>
           <div class="font-bold text-xl">Minim</div>
           <div class="text-amber-200">2 beats</div>
@@ -240,7 +256,10 @@
         <!-- Crotchet -->
         <button onclick="explorerExploreNote('crotchet', 1, 'Crotchet')" 
                 class="explorer-btn p-6 bg-sky-600 hover:bg-sky-500 rounded-3xl flex flex-col items-center">
-          <div class="note-icon-slot mb-2"><span class="note-glyph">♩</span></div>
+          <div class="note-icon-slot mb-2">
+            <span class="note-glyph note-unicode" aria-hidden="true">&#x1D15F;</span>
+            <span class="note-glyph note-fallback-text" aria-hidden="true">♩</span>
+          </div>
           <div class="font-bold text-xl">Crotchet</div>
           <div class="text-sky-200">1 beat</div>
         </button>
@@ -248,7 +267,10 @@
         <!-- Quaver -->
         <button onclick="explorerExploreNote('quaver', 0.5, 'Quaver')" 
                 class="explorer-btn p-6 bg-emerald-600 hover:bg-emerald-500 rounded-3xl flex flex-col items-center">
-          <div class="note-icon-slot mb-2"><span class="note-glyph">♪</span></div>
+          <div class="note-icon-slot mb-2">
+            <span class="note-glyph note-unicode" aria-hidden="true">&#x1D160;</span>
+            <span class="note-glyph note-fallback-text" aria-hidden="true">♪</span>
+          </div>
           <div class="font-bold text-xl">Quaver</div>
           <div class="text-emerald-200">½ beat</div>
         </button>
@@ -257,7 +279,8 @@
         <button onclick="explorerExploreNote('semiquaver', 0.25, 'Semiquaver')" 
                 class="explorer-btn p-6 bg-violet-600 hover:bg-violet-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-2">
-            <svg viewBox="0 0 75 150" class="note-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
+            <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
           </div>
           <div class="font-bold text-xl">Semiquaver</div>
           <div class="text-violet-200">¼ beat</div>
@@ -335,7 +358,8 @@
         <button onclick="notesAddNote('semibreve', 4)" 
                 class="notes-btn p-5 bg-red-600 hover:bg-red-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot note-icon-slot--semibreve mb-1">
-            <svg viewBox="0 0 15.698 7.087" class="note-svg note-svg--wide" aria-hidden="true"><use href="#note-semibreve"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅝</span>
+            <svg viewBox="0 0 15.698 7.087" class="note-svg note-svg--wide note-fallback-svg" aria-hidden="true"><use href="#note-semibreve"/></svg>
           </div>
           <div class="font-bold">Semibreve</div>
           <div class="text-xl font-mono text-red-200">4 beats</div>
@@ -345,7 +369,8 @@
         <button onclick="notesAddNote('minim', 2)" 
                 class="notes-btn p-5 bg-amber-600 hover:bg-amber-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-1">
-            <svg viewBox="0 0 75 150" class="note-svg" aria-hidden="true"><use href="#note-minim"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅗𝅥</span>
+            <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-minim"/></svg>
           </div>
           <div class="font-bold">Minim</div>
           <div class="text-xl font-mono text-amber-200">2 beats</div>
@@ -354,7 +379,10 @@
         <!-- Crotchet -->
         <button onclick="notesAddNote('crotchet', 1)" 
                 class="notes-btn p-5 bg-sky-600 hover:bg-sky-500 rounded-3xl flex flex-col items-center">
-          <div class="note-icon-slot mb-1"><span class="note-glyph">♩</span></div>
+          <div class="note-icon-slot mb-1">
+            <span class="note-glyph note-unicode" aria-hidden="true">&#x1D15F;</span>
+            <span class="note-glyph note-fallback-text" aria-hidden="true">♩</span>
+          </div>
           <div class="font-bold">Crotchet</div>
           <div class="text-xl font-mono text-sky-200">1 beat</div>
         </button>
@@ -362,7 +390,10 @@
         <!-- Quaver -->
         <button onclick="notesAddNote('quaver', 0.5)" 
                 class="notes-btn p-5 bg-emerald-600 hover:bg-emerald-500 rounded-3xl flex flex-col items-center">
-          <div class="note-icon-slot mb-1"><span class="note-glyph">♪</span></div>
+          <div class="note-icon-slot mb-1">
+            <span class="note-glyph note-unicode" aria-hidden="true">&#x1D160;</span>
+            <span class="note-glyph note-fallback-text" aria-hidden="true">♪</span>
+          </div>
           <div class="font-bold">Quaver</div>
           <div class="text-xl font-mono text-emerald-200">½ beat</div>
         </button>
@@ -371,7 +402,8 @@
         <button onclick="notesAddNote('semiquaver', 0.25)" 
                 class="notes-btn p-5 bg-violet-600 hover:bg-violet-500 rounded-3xl flex flex-col items-center">
           <div class="note-icon-slot mb-1">
-            <svg viewBox="0 0 75 150" class="note-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
+            <span class="note-glyph note-unicode" aria-hidden="true">𝅘𝅥𝅯</span>
+            <svg viewBox="0 0 75 150" class="note-svg note-fallback-svg" aria-hidden="true"><use href="#note-semiquaver"/></svg>
           </div>
           <div class="font-bold">Semiquaver</div>
           <div class="text-xl font-mono text-violet-200">¼ beat</div>
@@ -636,11 +668,55 @@
   </div><!-- /screen-game -->
 
   <script>
+    const MUSIC_FONT = 'Noto Music';
+    const MUSIC_NOTE_CHARS = {
+      semibreve: '\uD834\uDD5D',
+      minim: '\uD834\uDD5E',
+      crotchet: '\uD834\uDD5F',
+      quaver: '\uD834\uDD60',
+      semiquaver: '\uD834\uDD61',
+    };
+    const LEGACY_NOTE_CHARS = { crotchet: '♩', quaver: '♪' };
+    let useMusicFont = false;
+    let explorerLastNote = null;
+
     const NOTE_SVG_SPECS = {
       semibreve: { id: 'note-semibreve', viewBox: '0 0 15.698 7.087', width: 95, height: 42 },
       minim: { id: 'note-minim', viewBox: '0 0 75 150', width: 48, height: 95 },
       semiquaver: { id: 'note-semiquaver', viewBox: '0 0 75 150', width: 48, height: 95 },
     };
+
+    async function initMusicFont() {
+      if (!document.fonts) return;
+      const testChar = MUSIC_NOTE_CHARS.semibreve;
+      const fontSpec = `48px "${MUSIC_FONT}"`;
+      try {
+        const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000));
+        await Promise.race([document.fonts.load(fontSpec, testChar), timeout]);
+        await document.fonts.ready;
+        if (!document.fonts.check(fontSpec, testChar)) return;
+        useMusicFont = true;
+        document.body.classList.add('music-font-ready');
+        if (typeof notesUpdateUI === 'function' && notesSequence.length) notesUpdateUI();
+        if (explorerLastNote) explorerExploreNote(...explorerLastNote);
+      } catch { /* SVG fallback */ }
+    }
+
+    function renderExplorerSymbol(symbolEl, type) {
+      if (useMusicFont) {
+        const semibreveSlot = type === 'semibreve' ? ' note-icon-slot--semibreve' : '';
+        symbolEl.className = 'mb-2';
+        symbolEl.innerHTML = `<div class="note-icon-slot note-icon-slot--lg${semibreveSlot} mx-auto md:mx-0"><span class="note-glyph music-font">${MUSIC_NOTE_CHARS[type]}</span></div>`;
+      } else if (NOTES_SVG_TYPES.has(type)) {
+        const wide = type === 'semibreve' ? ' note-svg--wide' : '';
+        const semibreveSlot = type === 'semibreve' ? ' note-icon-slot--semibreve' : '';
+        symbolEl.className = 'mb-2';
+        symbolEl.innerHTML = `<div class="note-icon-slot note-icon-slot--lg${semibreveSlot} mx-auto md:mx-0">${noteSvgHtml(type, `note-svg${wide}`, 'lg')}</div>`;
+      } else {
+        symbolEl.className = 'text-8xl mb-2';
+        symbolEl.textContent = LEGACY_NOTE_CHARS[type] || '';
+      }
+    }
 
     function noteSvgHtml(type, className = 'note-svg', size = 'md') {
       const spec = NOTE_SVG_SPECS[type];
@@ -2634,20 +2710,20 @@
     // --- Fraction Notes ---
     const NOTES_SVG_TYPES = new Set(['semibreve', 'minim', 'semiquaver']);
 
-    const NOTES_NOTE_SYMBOLS = {
-      crotchet: '♩',
-      quaver: '♪',
-    };
-
     let notesSequence = [];
     let notesAudioCtx = null;
 
     function notesNoteSymbolHtml(type, size = 'bar') {
+      if (useMusicFont) {
+        const sym = MUSIC_NOTE_CHARS[type] || '?';
+        const textCls = size === 'eq' ? 'music-font notes-glyph-eq' : 'music-font notes-glyph-sm drop-shadow';
+        return `<span class="${textCls}">${sym}</span>`;
+      }
       if (NOTES_SVG_TYPES.has(type)) {
         const cls = size === 'eq' ? 'note-svg notes-icon-eq' : 'note-svg notes-icon-sm';
         return noteSvgHtml(type, cls, size === 'eq' ? 'eq' : 'sm');
       }
-      const sym = NOTES_NOTE_SYMBOLS[type] || '?';
+      const sym = LEGACY_NOTE_CHARS[type] || '?';
       const textCls = size === 'eq' ? 'text-base' : 'text-lg drop-shadow';
       return `<span class="${textCls}">${sym}</span>`;
     }
@@ -2853,32 +2929,20 @@
 
     // --- Fraction Explorer ---
 function explorerExploreNote(type, beats, name) {
+      explorerLastNote = [type, beats, name];
       document.getElementById('explorer-empty-state').classList.add('hidden');
       document.getElementById('explorer-display-panel').classList.remove('hidden');
 
       document.getElementById('explorer-note-name').textContent = name;
       document.getElementById('explorer-note-beats').textContent = `${beats} beat${beats !== 1 ? 's' : ''}`;
 
-      const symbolEl = document.getElementById('explorer-note-symbol');
-      if (NOTES_SVG_TYPES.has(type)) {
-        const wide = type === 'semibreve' ? ' note-svg--wide' : '';
-        const semibreveSlot = type === 'semibreve' ? ' note-icon-slot--semibreve' : '';
-        symbolEl.innerHTML = `<div class="note-icon-slot note-icon-slot--lg${semibreveSlot} mx-auto md:mx-0">${noteSvgHtml(type, `note-svg${wide}`, 'lg')}</div>`;
-      } else {
-        symbolEl.textContent = explorerGetSymbol(type);
-      }
+      renderExplorerSymbol(document.getElementById('explorer-note-symbol'), type);
 
       explorerUpdateEquivalents(type);
       const percent = (beats / 4) * 100;
       explorerUpdateVisual('explorer-pizza-visual', percent, 'pizza');
       explorerUpdateVisual('explorer-chocolate-visual', percent, 'chocolate');
       explorerUpdateVisual('explorer-pie-visual', percent, 'pie');
-    }
-
-    function explorerGetSymbol(type) {
-      if (type === 'crotchet') return '♩';
-      if (type === 'quaver') return '♪';
-      return '';
     }
 
     function explorerUpdateEquivalents(type) {
@@ -2987,6 +3051,7 @@ function explorerExploreNote(type, beats, name) {
 
     // --- App init ---
 
+    initMusicFont();
     updateAudioStatusUI();
     const appData = loadAppData();
     currentUserId = appData.currentUser || 'christian';
